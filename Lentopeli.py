@@ -1,19 +1,31 @@
+import mysql.connector
+import time
+
 yhteys = mysql.connector.connect(
     host='localhost',
     database='flight_game',
     user='username',
     password='salasana',
     autocommit=True,
-    collation='utf8mb4_unicode_ci'
+    collation = 'utf8mb4_unicode_ci'
 )
-print("Tervetuloa Lennä ja tiedä! -peliin, jossa opit lisää eri Euroopan maista!")
-print("Tässä pelissä saat tähtiä oikein vastatuista kysymyksistä eri maista, joihin olet lentämässä.")
-print("Sinun pitää vastata vähintään oikein yhteen kysymykseen maasta johon olet lentämässä, tai lentokone lentää takaisin maahan mistä lähdit ja voit yrittää joko uudelleen tai valita toisen maan.")
-print("Sinun on kuitenkin palattava jossain vaiheessa takaisin maahan missä et vastannut yhteenkään oikeaan kysymykseen, jotta pääset pelin loppuun.")
-print("Pelin lopussa sinulle kerrotaan montako tähteä, eli pistettä,olet kerännyt. Maksimi pistemäärä on 30.")
-input("Oletko ymmärtänyt ohjeet? Paina enter aloittaaksesi!")
-print("")
-print("Olet Helsinki-Vantaan lentokentällä. Olet saanut tarpeeksesi Suomen kylmyydestä ja haluat vaihtaa maisemaa.")
+
+def dialogue(text):
+    for i in text:
+        print(i, end="")
+        time.sleep(0.035)
+    print()
+    time.sleep(len(text) / 1000)
+
+
+dialogue("Tervetuloa Lennä ja tiedä! -peliin, jossa opit lisää eri Euroopan maista!")
+dialogue("Tässä pelissä saat tähtiä oikein vastatuista kysymyksistä eri maista, joihin olet lentämässä.")
+dialogue("Sinun pitää vastata vähintään oikein yhteen kysymykseen maasta johon olet lentämässä, tai lentokone lentää takaisin maahan mistä lähdit ja voit yrittää joko uudelleen tai valita toisen maan.")
+dialogue("Sinun on kuitenkin palattava jossain vaiheessa takaisin maahan missä et vastannut yhteenkään oikeaan kysymykseen, jotta pääset pelin loppuun.")
+dialogue("Pelin lopussa sinulle kerrotaan montako tähteä, eli pistettä,olet kerännyt. Maksimi pistemäärä on 30.")
+dialogue("Oletko ymmärtänyt ohjeet? Paina enter aloittaaksesi!")
+dialogue("")
+dialogue("Olet Helsinki-Vantaan lentokentällä. Olet saanut tarpeeksesi Suomen kylmyydestä ja haluat vaihtaa maisemaa.")
 
 # Lista maista
 countries = [
@@ -41,7 +53,6 @@ while True:
         print("\nValintasi on virheellinen. Valitse luku 1 ja 10 välillä.")
 
 
-
 if country =="1":
     print("Olet valinnut Ruotsin! Lentokoneesi suuntaa sinne.")
 elif country =="2":
@@ -63,5 +74,12 @@ elif country == "9":
 elif country == "10":
     print("Olet valinnut Hollannin! Lentokoneesi suuntaa sinne.")
 
+#Toinen vaihtoehto
+print('Valitse maa, johon haluat lentää.')
+countries = ['\nRanska', '\nEspanja', '\nYhdistynyt Kuningaskunta', '\nHollanti',
+             '\nSaksa', '\nItalia', '\nIrlanti', '\nKreikka', '\nTanska', '\nRuotsi']
+print(*countries)
+where_to = input('\nSyötä haluamasi maan nimi: ')
 
-
+if where_to not in countries:
+    print('Virhellinen maan nimi.')
