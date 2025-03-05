@@ -13,7 +13,7 @@ yhteys = mysql.connector.connect(
 def dialogue(text):
     for i in text:
         print(i, end="")
-        time.sleep(0.035)
+        time.sleep(0.000)
     print()
     time.sleep(len(text) / 1000)
 
@@ -73,13 +73,3 @@ elif country == "9":
     print("Olet valinnut Saksan! Lentokoneesi suuntaa sinne.")
 elif country == "10":
     print("Olet valinnut Hollannin! Lentokoneesi suuntaa sinne.")
-
-#Toinen vaihtoehto
-print('Valitse maa, johon haluat lentää.')
-countries = ['\nRanska', '\nEspanja', '\nYhdistynyt Kuningaskunta', '\nHollanti',
-             '\nSaksa', '\nItalia', '\nIrlanti', '\nKreikka', '\nTanska', '\nRuotsi']
-print(*countries)
-where_to = input('\nSyötä haluamasi maan nimi: ')
-
-if where_to not in countries:
-    print('Virhellinen maan nimi.')
