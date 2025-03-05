@@ -1,3 +1,14 @@
+import mysql.connector
+
+yhteys = mysql.connector.connect(
+    host='localhost',
+    database='flight_game',
+    user='username',
+    password='salasana',
+    autocommit=True,
+    collation = 'utf8mb4_unicode_ci'
+)
+
 print("Tervetuloa Lennä ja tiedä! -peliin, jossa opit lisää eri Euroopan maista!")
 print("Tässä pelissä saat tähtiä oikein vastatuista kysymyksistä eri maista, joihin olet lentämässä.")
 print("Sinun pitää vastata vähintään oikein yhteen kysymykseen maasta johon olet lentämässä, tai lentokone lentää takaisin maahan mistä lähdit ja voit yrittää joko uudelleen tai valita toisen maan.")
@@ -33,7 +44,6 @@ while True:
         print("\nValintasi on virheellinen. Valitse luku 1 ja 10 välillä.")
 
 
-
 if country =="1":
     print("Olet valinnut Ruotsin! Lentokoneesi suuntaa sinne.")
 elif country =="2":
@@ -54,18 +64,6 @@ elif country == "9":
     print("Olet valinnut Saksan! Lentokoneesi suuntaa sinne.")
 elif country == "10":
     print("Olet valinnut Hollannin! Lentokoneesi suuntaa sinne.")
-
-import mysql.connector
-import random
-
-yhteys = mysql.connector.connect(
-    host='localhost',
-    database='flight_game',
-    user='username',
-    password='salasana',
-    autocommit=True,
-    collation = 'utf8mb4_unicode_ci'
-)
 
 print('Valitse maa, johon haluat lentää.')
 countries = ['\nRanska', '\nEspanja', '\nYhdistynyt Kuningaskunta', '\nHollanti',
