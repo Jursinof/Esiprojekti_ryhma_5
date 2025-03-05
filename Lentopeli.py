@@ -54,3 +54,24 @@ elif country == "9":
     print("Olet valinnut Saksan! Lentokoneesi suuntaa sinne.")
 elif country == "10":
     print("Olet valinnut Hollannin! Lentokoneesi suuntaa sinne.")
+
+import mysql.connector
+import random
+
+yhteys = mysql.connector.connect(
+    host='localhost',
+    database='flight_game',
+    user='username',
+    password='salasana',
+    autocommit=True,
+    collation = 'utf8mb4_unicode_ci'
+)
+
+print('Valitse maa, johon haluat lentää.')
+countries = ['\nRanska', '\nEspanja', '\nYhdistynyt Kuningaskunta', '\nHollanti',
+             '\nSaksa', '\nItalia', '\nIrlanti', '\nKreikka', '\nTanska', '\nRuotsi']
+print(*countries)
+where_to = input('\nSyötä haluamasi maan nimi: ')
+
+if where_to not in countries:
+    print('Virhellinen maan nimi.')
