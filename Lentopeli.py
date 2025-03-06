@@ -75,13 +75,3 @@ elif country == "10":
     print("Olet valinnut Hollannin! Lentokoneesi suuntaa sinne.")
 
 
-#Jotai testailuu
-def lento(kohdemaa):
-    sql = "SELECT maa, kysymys, vaihtoehdot FROM questions"
-    kursori = yhteys.cursor()
-    kursori.execute(sql)
-    tulos = kursori.fetchall()
-    return tulos
-
-lento(kohdemaa)
-
