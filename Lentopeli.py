@@ -20,9 +20,9 @@ def intro(text):
 
 intro("Tervetuloa Lennä ja tiedä! -peliin, jossa opit lisää eri Euroopan maista!")
 intro("Tässä pelissä saat tähtiä oikein vastatuista kysymyksistä eri maista, joihin olet lentämässä.")
-intro("Sinun pitää vastata vähintään oikein yhteen kysymykseen maasta johon olet lentämässä, tai lentokone lentää takaisin maahan mistä lähdit ja voit yrittää joko uudelleen tai valita toisen maan.")
-intro("Sinun on kuitenkin palattava jossain vaiheessa takaisin maahan missä et vastannut yhteenkään oikeaan kysymykseen, jotta pääset pelin loppuun.")
-intro("Pelin lopussa sinulle kerrotaan montako tähteä, eli pistettä,olet kerännyt. Maksimi pistemäärä on 30.")
+intro("Sinun pitää vastata oikein vähintään yhteen kysymykseen maasta johon olet lentämässä, tai lentokone lentää takaisin maahan, josta lähdit. Tällöin voit yrittää uudelleen, tai valita toisen maan.")
+intro("Sinun on kuitenkin palattava jossain vaiheessa takaisin maahan, jossa et vastannut yhteenkään kysymykseen oikein, jotta pääset pelin loppuun.")
+intro("Pelin lopussa sinulle kerrotaan montako tähteä, eli pistettä, olet kerännyt. Maksimi pistemäärä on 30.")
 intro("Oletko ymmärtänyt ohjeet? Paina enter aloittaaksesi!")
 intro("")
 intro("Olet Helsinki-Vantaan lentokentällä. Olet saanut tarpeeksesi Suomen kylmyydestä ja haluat vaihtaa maisemaa.")
@@ -74,6 +74,8 @@ elif country == "9":
 elif country == "10":
     print("Olet valinnut Hollannin! Lentokoneesi suuntaa sinne.")
 
+
+#Jotai testailuu
 def lento(kohdemaa):
     sql = "SELECT maa, kysymys, vaihtoehdot FROM questions"
     kursori = yhteys.cursor()
@@ -82,5 +84,4 @@ def lento(kohdemaa):
     return tulos
 
 lento(kohdemaa)
-
 
