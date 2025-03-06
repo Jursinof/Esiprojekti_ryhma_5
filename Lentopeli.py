@@ -32,7 +32,7 @@ countries = [
     "Ruotsi", "Saksa", "Ranska", "Italia",
     "Espanja", "Englanti", "Tanska","Kreikka","Irlanti", "Hollanti"]
 
-kohdemaa = input("\nValitse maa, johon haluat lentää (1-10):")
+print("\nValitse maa, johon haluat lentää (1-10):")
 print("1. Ruotsi")
 print("2. Saksa")
 print("3. Ranska")
