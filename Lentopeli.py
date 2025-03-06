@@ -24,7 +24,7 @@ intro("Sinun pitää vastata oikein vähintään yhteen kysymykseen maasta johon
 intro("Sinun on kuitenkin palattava jossain vaiheessa takaisin maahan, jossa et vastannut yhteenkään kysymykseen oikein, jotta pääset pelin loppuun.")
 intro("Pelin lopussa sinulle kerrotaan montako tähteä, eli pistettä, olet kerännyt. Maksimi pistemäärä on 30.")
 intro("Oletko ymmärtänyt ohjeet? Paina enter aloittaaksesi!")
-intro("")
+input("")
 intro("Olet Helsinki-Vantaan lentokentällä. Olet saanut tarpeeksesi Suomen kylmyydestä ja haluat vaihtaa maisemaa.")
 
 # Lista maista
