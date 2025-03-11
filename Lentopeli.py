@@ -1,9 +1,10 @@
 import mysql.connector
 import time
+import json
 
 yhteys = mysql.connector.connect(
     host='localhost',
-    database='flight_game',
+    database='lentopeli',
     user='username',
     password='salasana',
     autocommit=True,
@@ -74,4 +75,12 @@ elif country == "9":
 elif country == "10":
     print("Olet valinnut Hollannin! Lentokoneesi suuntaa sinne.")
 
+
+
+cursor = yhteys.cursor()
+
+cursor.execute("SELECT maa, kysymys, vaihtoehdot FROM questions WHERE maa = 'Ruotsi'")
+
+for (maa, kysymys, vaihtoehdot) in cursor.fetchall():
+    print(maa, kysymys, vaihtoehdot)
 
