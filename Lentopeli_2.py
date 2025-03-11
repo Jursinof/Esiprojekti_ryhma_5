@@ -8,8 +8,8 @@ import random
 yhteys = mysql.connector.connect(
     host='localhost',
     database='lentopeli',
-    user='username',
-    password='salasana',
+    user='user',
+    password='password',
     autocommit=True,
     collation = 'utf8mb4_unicode_ci'
 )
@@ -36,33 +36,22 @@ intro("Olet Helsinki-Vantaan lentokentällä. Olet saanut tarpeeksesi Suomen kyl
 
 cursor = yhteys.cursor()
 
-# Käytä parameterisoitua kyselyä
+# SQL-komento uuden rivin lisäämiseksi
 sql = "INSERT INTO player_state (nykyinen_maa, tähdet, vieraillut_maat) VALUES (%s, %s, %s)"
-arvot = ("Suomi", 0, "")
+arvot = ("Suomi", 0, "[]")  # Huom! Suomi on oletusalkumaatila, vieraillut_maat jätetään tyhjäksi.
 
-# Suorita SQL-lause turvallisesti
-cursor.execute(sql, arvot)
+try:
+    # Suorita komento ja varmista tietokantamuutokset
+    cursor.execute(sql, arvot)
+    yhteys.commit()
+    print("Uusi rivi lisättiin onnistuneesti tauluun player_state.")
+except mysql.connector.Error as err:
+    print(f"Tapahtui virhe: {err}")
 
-# Varmistetaan tietokantamuutokset
-yhteys.commit()
-
-# Suljetaan tietokantayhteys
+# Suljetaan kursori ja yhteys
 cursor.close()
 yhteys.close()
-#cursor = yhteys.cursor()
-#sql = 'INSERT INTO player_state (nykyinen_maa, tähdet, vieraillut_maat) VALUES ("Suomi", 0, "")';
-#cursor.execute(sql)
-#yhteys.commit()
-#cursor.close()
-#yhteys.close()
 
-
-
-#cursor.execute("SELECT maa, kysymys, vaihtoehdot FROM questions WHERE maa = 'Ruotsi'")
-
-#for (maa, kysymys, vaihtoehdot) in cursor.fetchmany(3):
-    #print(kysymys, vaihtoehdot)
-    #input('')
 
 
 
