@@ -11,7 +11,7 @@ try:
         host='localhost',
         database='lentopeli',
         user='username',
-        password='password',
+        password='salasana',
         autocommit=True,
         collation = 'utf8mb4_unicode_ci'
     )
@@ -21,7 +21,7 @@ try:
     def intro(text):
         for i in text:
             print(i, end="")
-            time.sleep(0.000)
+            time.sleep(0.033)
         print()
         time.sleep(len(text) / 1000)
 
