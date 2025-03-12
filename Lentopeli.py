@@ -5,8 +5,8 @@ import json
 yhteys = mysql.connector.connect(
     host='localhost',
     database='lentopeli',
-    user='username',
-    password='salasana',
+    user='riikka',
+    password='koodar1',
     autocommit=True,
     collation = 'utf8mb4_unicode_ci'
 )
