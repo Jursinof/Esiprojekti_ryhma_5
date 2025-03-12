@@ -10,8 +10,8 @@ try:
     yhteys = mysql.connector.connect(
         host='localhost',
         database='lentopeli',
-        user='user',
-        password='password',
+        user='riikka',
+        password='koodar1',
         autocommit=True,
         collation = 'utf8mb4_unicode_ci'
     )
@@ -47,11 +47,36 @@ try:
     yhteys.commit()
 
     while True:
-        cursor.execute("SELECT * FROM airports")
+        # Haetaan vieraillut maat tietokannasta
+        cursor.execute("SELECT vieraillut_maat FROM player_state")
+        result = cursor.fetchone()
+
+        if result:
+            vieraillut_maat = json.loads(result[0])  # Muunnetaan JSON-listaksi
+        else:
+            vieraillut_maat = []  # Jos sarake on tyhjä, aloitetaan tyhjällä listalla
+
+        # Haetaan kaikki maat airports-taulusta
+        cursor.execute("SELECT id, maa FROM airports")
         tulos = cursor.fetchall()
 
-        print('\nValitse tästä listasta kohde, johon haluat lentää. Tee valinta antamalla kohdemaata vastaava numero.')
-        for x in tulos:
+        # Suodatetaan pois maat, joissa on jo käyty
+        saatavilla_olevat_maat = sorted([x for x in tulos if x[1] not in vieraillut_maat], key=lambda x: x[0])
+
+        # Jos kaikki maat on käyty, peli päättyy
+        if not saatavilla_olevat_maat:
+            print("\nOnneksi olkoon! Olet vieraillut kaikissa maissa ja suorittanut pelin loppuun!")
+
+            # Haetaan lopullinen tähtien määrä tietokannasta
+            cursor.execute("SELECT tähdet FROM player_state")
+            tulos = cursor.fetchone()
+            kokonaistähdet = tulos[0] if tulos else 0
+
+            print(f'Kokonaispistemääräsi: {kokonaistähdet} tähteä!')
+            break  # Lopetetaan peli
+
+        print('\nValitse seuraava kohdemaa. Tee valinta antamalla kohdemaata vastaava numero.')
+        for x in saatavilla_olevat_maat:
             print(x)
 
         maa_id = int(input('\nAnna kohdemaata vastaava numero: '))
@@ -61,49 +86,78 @@ try:
 
         if rivit:
             kohdemaa = rivit[0][0]
-            print(f'Olet matkalla maahan {kohdemaa}')
 
-            kysymykset_query = "SELECT kysymys, vaihtoehdot, oikea_vastaus FROM questions WHERE maa = %s"
-            cursor.execute(kysymykset_query, (kohdemaa,))
-            questions = cursor.fetchall()
-            random.shuffle(questions)
+            # Tarkistetaan vielä kerran, ettei maa ole vieraillut_maat-listassa
+            if kohdemaa in vieraillut_maat:
+                print("\nOlet jo vieraillut tässä maassa! Valitse toinen maa.")
+                continue  # Palataan valikkoon
+
+            print(f'Olet matkalla maahan {kohdemaa}.')
 
             oikeat_vastaukset = 0
             kysymys_lista = []
 
+            kysymykset_query = "SELECT kysymys, vaihtoehdot, oikea_vastaus FROM questions WHERE maa = %s"
+            cursor.execute(kysymykset_query, (kohdemaa,))
+            questions = cursor.fetchall()
+
+            random.shuffle(questions)
+            questions = questions[:3]
+
             for kysymys, vaihtoehdot, oikea_vastaus in questions[:3]:
                 print(f"\n{kysymys}")
                 vaihtoehdot = json.loads(vaihtoehdot)
+
                 for key, value in vaihtoehdot.items():
                     print(f"{key}. {value}")
 
-                vastaus = input("Valitse oikea vaihtoehto (A/B/C): ").strip().upper()
+                while True:  # Jatketaan kysymistä, kunnes käyttäjä antaa oikean syötteen
+                    vastaus = input("Valitse oikea vaihtoehto (A/B/C): ").strip().upper()
 
-                # Tarkistetaan, onko syöte kelvollinen
-                if vastaus not in vaihtoehdot:
-                    print("Virheellinen syöte, yritä uudelleen.")
-                    continue  # Jos syöte ei ole kelvollinen, palaa kysymykseen
+                    if vastaus in vaihtoehdot:
+                        break  # Käyttäjä antoi kelvollisen vastauksen, poistutaan loopista
+                    else:
+                        print("Virheellinen syöte, yritä uudelleen.")
 
-                valittu_vastaus = vaihtoehdot[vastaus]  # Haetaan valittu vastaus sanakirjasta
-
-                if valittu_vastaus == oikea_vastaus:
-                    print(f"Vastaus oikein: {valittu_vastaus} == {oikea_vastaus}")  # Debugging
+                # Tässä verrataan suoraan käyttäjän syötettä tietokannassa olevaan oikeaan vastaukseen
+                if vastaus == oikea_vastaus:
+                    print(f"Vastaus oikein!")  # Debugging
                     oikeat_vastaukset += 1
                     kysymys_lista.append(f"Oikein: {kysymys}")
                 else:
-                    print(f"Vastaus väärin: {valittu_vastaus} != {oikea_vastaus}")  # Debugging
+                    print(f"Vastaus väärin.")  # Debugging
                     kysymys_lista.append(f"Väärin: {kysymys}")
 
-            print(f"Oikeat vastaukset: {oikeat_vastaukset}")  # Debugging
             if oikeat_vastaukset > 0:
-                print("\nOnneksi olkoon! Vastasit oikein seuraaviin kysymyksiin:")
-                for kysymys in kysymys_lista:
-                    print(kysymys)
-                break
+                print(f"\nOnneksi olkoon! Sait yhteensä: {oikeat_vastaukset} tähteä! Saavuit kohteeseen.")
+                print("Valitse alla olevasta listasta seuraava maa johon haluat matkustaa.")
+
+                # Lisätään player_state tauluun saadut tähdet sekä vieraillut maat
+                update_query = "UPDATE player_state SET tähdet = tähdet + %s"
+                cursor.execute(update_query, (oikeat_vastaukset,))
+                yhteys.commit()  # Tallennetaan muutos tietokantaan
+
+                # Haetaan nykyinen vieraillut_maat -lista
+                cursor.execute("SELECT vieraillut_maat FROM player_state")
+                result = cursor.fetchone()
+
+                if result:
+                    vieraillut_maat = json.loads(result[0]) # Muunnetaan JSON-listaksi
+                else:
+                    vieraillut_maat = [] # Jos sarake on tyhjä, aloitetaan tyhjällä listalla
+
+                # Lisätään uusi kohdemaa listaan, jos sitä ei ole vielä siellä
+                if kohdemaa not in vieraillut_maat:
+                    vieraillut_maat.append(kohdemaa)
+
+                    # Päivitetään tietokantaan uusi lista JSON-muodossa
+                    update_query = "UPDATE player_state SET vieraillut_maat = %s"
+                    cursor.execute(update_query, (json.dumps(vieraillut_maat),))
+                    yhteys.commit()
+
+
             else:
                 print("\nEt vastannut yhteenkään kysymykseen oikein. Kone palaa lähtömaahan.")
-
-    # Jatketaan tähän kohtaan
 
 except mysql.connector.Error as err:
     # Tietokantaoperaatioissa tapahtuneet virheet
