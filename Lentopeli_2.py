@@ -10,8 +10,8 @@ try:
     yhteys = mysql.connector.connect(
         host='localhost',
         database='lentopeli',
-        user='username',
-        password='salasana',
+        user='riikka',
+        password='koodar1',
         autocommit=True,
         collation = 'utf8mb4_unicode_ci'
     )
@@ -21,7 +21,7 @@ try:
     def intro(text):
         for i in text:
             print(i, end="")
-            time.sleep(0.033)
+            time.sleep(0.000)
         print()
         time.sleep(len(text) / 1000)
 
@@ -80,19 +80,13 @@ try:
             print(x)
 
         maa_id = int(input('\nAnna kohdemaata vastaava numero: '))
-        kohdemaa_query = "SELECT maa FROM airports WHERE id = %s"
+        kohdemaa_query = "SELECT maa, nimi FROM airports WHERE id = %s"
         cursor.execute(kohdemaa_query, (maa_id,))
         rivit = cursor.fetchall()
 
         if rivit:
-            kohdemaa = rivit[0][0]
-
-            # Tarkistetaan vielä kerran, ettei maa ole vieraillut_maat-listassa
-            if kohdemaa in vieraillut_maat:
-                print("\nOlet jo vieraillut tässä maassa! Valitse toinen maa.")
-                continue  # Palataan valikkoon
-
-            print(f'Olet matkalla maahan {kohdemaa}.')
+            kohdemaa, nimi = rivit[0]
+            print(f'Olet matkalla maahan {kohdemaa}, kentälle {nimi}.')
 
             oikeat_vastaukset = 0
             kysymys_lista = []
@@ -136,6 +130,11 @@ try:
                 update_query = "UPDATE player_state SET tähdet = tähdet + %s"
                 cursor.execute(update_query, (oikeat_vastaukset,))
                 yhteys.commit()  # Tallennetaan muutos tietokantaan
+
+                # Päivitetään nykyinen_maa tietokantaan
+                update_query = "UPDATE player_state SET nykyinen_maa = %s"
+                cursor.execute(update_query, (kohdemaa,))
+                yhteys.commit()
 
                 # Haetaan nykyinen vieraillut_maat -lista
                 cursor.execute("SELECT vieraillut_maat FROM player_state")
