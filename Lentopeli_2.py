@@ -10,8 +10,8 @@ try:
     yhteys = mysql.connector.connect(
         host='localhost',
         database='lentopeli',
-        user='riikka',
-        password='koodar1',
+        user='username',
+        password='salasana',
         autocommit=True,
         collation = 'utf8mb4_unicode_ci'
     )
@@ -21,7 +21,7 @@ try:
     def intro(text):
         for i in text:
             print(i, end="")
-            time.sleep(0.000)
+            time.sleep(0.030)
         print()
         time.sleep(len(text) / 1000)
 
