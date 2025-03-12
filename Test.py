@@ -5,10 +5,10 @@ try:
     yhteys = mysql.connector.connect(
         host='localhost',
         database='lentopeli',
-        user='username',
-        password='password',
+        user='riikka',
+        password='koodar1',
         autocommit=True,
-        collation = 'utf8mb4_unicode_ci'
+        collation='utf8mb4_unicode_ci'
     )
 
     cursor = yhteys.cursor()
