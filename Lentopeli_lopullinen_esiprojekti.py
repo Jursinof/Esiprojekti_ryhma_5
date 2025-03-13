@@ -10,8 +10,8 @@ try:
     yhteys = mysql.connector.connect(
         host='localhost',
         database='lentopeli',
-        user='username',
-        password='salasana',
+        user='user',
+        password='password',
         autocommit=True,
         collation = 'utf8mb4_unicode_ci'
     )

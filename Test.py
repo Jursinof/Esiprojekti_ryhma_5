@@ -5,8 +5,8 @@ try:
     yhteys = mysql.connector.connect(
         host='localhost',
         database='lentopeli',
-        user='riikka',
-        password='koodar1',
+        user='user',
+        password='password',
         autocommit=True,
         collation='utf8mb4_unicode_ci'
     )
